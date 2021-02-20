@@ -22,17 +22,21 @@ windows10 + python3.8 + pytorch1.7 + cv2 + scikit-learn
 1、train_list.txt---预训练数据，数据在17flowers文件夹中         
 2、fine_tune_list.txt---微调数据2flowers文件夹中       
 3、通过RCNN后的区域划分                   
-![RCNN_1](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_4-1.png)　　　
-4、通过SVM与边框回归之后的最终结果  
+![RCNN_1](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_4-1.png)    
+　　　
+4、通过SVM与边框回归之后的最终结果      
 ![RCNN_2](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_4-2.png)                     
 
 
 # 论文细节补充：
 1.finturn过程：
+      
   计算每个region proposal与人工标注的框的IoU，IoU重叠阈值设为0.5，大于这个阈值的作为正样本，其他作     
 　为负样本。然后在训练的每一次迭代中都使用32个正样本（包括所有类别）和96个背景样本组成的128张图片的batch    
 　进行训练（正样本图片太少了）      
-2.SVM训练过程：     
+
+2.SVM训练过程：
+          
 　对每个类都训练一个线性的SVM分类器，训练SVM需要正负样本文件，这里的正样本就是ground-truth框中的图像作    
 　为正样本，完全不包含的region proposal应该是负样本，但是对于部分包含某一类物体的region proposal该如  
 　何训练作者同样是使用IoU阈值的方法，这次的阈值为0.3，计算每一个region proposal与标准框的IoU，小于0.3   
@@ -42,8 +46,10 @@ windows10 + python3.8 + pytorch1.7 + cv2 + scikit-learn
 　ImageNet预训练了CNN，并用提取的特征训练了SVMs，此时用正负样本标记方法就是前面所述的0.3,后来刚开始使用   
 　fine-tuning时，使用了这个方法但是发现结果很差，于是通过调试选择了0.5这个方法，作者认为这样可以加大样本   
 　的数量，从而避免过拟合。然而，IoU大于0.5就作为正样本会导致网络定位准确度的下降，故使用了SVM来做检测，全    
-　部使用ground-truth样本作为正样本，且使用非正样本的，且IoU小于0.3的“hard negatives”，提高了定位的准确度。           
+　部使用ground-truth样本作为正样本，且使用非正样本的，且IoU小于0.3的“hard negatives”，提高了定位的准确度。  
+
  3.hard negatives:    
+
 　在训练过程中会出现 正样本的数量远远小于负样本，这样训练出来的分类器的效果总是有限的，会出现许多false positive。
 　采取办法可以是，先将正样本与一部分的负样本投入模型进行训练，然后将训练出来的模型去预测剩下未加入训练过程的负样本，
 　当负样本被预测为正样本时，则它就为false positive，就把它加入训练的负样本集，进行下一次训练，知道模型的预测精度不再提升
