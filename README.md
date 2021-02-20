@@ -21,8 +21,10 @@ windows10 + python3.8 + pytorch1.7 + cv2 + scikit-learn
 # 文件说明   
 1、train_list.txt---预训练数据，数据在17flowers文件夹中         
 2、fine_tune_list.txt---微调数据2flowers文件夹中       
-3、通过RCNN后的区域划分　　通过SVM与边框回归之后的最终结果                     
-　　![RCNN_1](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_1-1.png)　　　![RCNN_2](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_1-2.png)                     
+3、通过RCNN后的区域划分                   
+![RCNN_1](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_4-1.png)　　　
+4、通过SVM与边框回归之后的最终结果  
+![RCNN_2](https://github.com/qew21/RCNN-pytorch/blob/master/result/Figure_4-2.png)                     
 
 
 # 论文细节补充：
